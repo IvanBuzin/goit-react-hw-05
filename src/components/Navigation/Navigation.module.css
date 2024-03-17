@@ -1,0 +1,16 @@
+.head {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px 0;
+}
+.nav {
+  display: flex;
+  gap: 12px;
+}
+.link {
+  color: #000;
+}
+.active {
+  color: aqua;
+}
