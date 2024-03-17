@@ -3,7 +3,7 @@ import { getImagePath, getMovieById } from "../../rest-api";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
-import css from "./MovieDetalsPage.module.css";
+import css from "./MovieDetailsPage.module.css";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useRef } from "react";
 import { Suspense } from "react";
