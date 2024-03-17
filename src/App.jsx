@@ -4,7 +4,6 @@ import { Toaster } from "react-hot-toast";
 import { Suspense } from "react";
 import { lazy } from "react";
 import Loader from "./components/Loader/Loader";
-import css from "./";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
 const MoviePage = lazy(() => import("./pages/MoviePage/MoviePage"));
