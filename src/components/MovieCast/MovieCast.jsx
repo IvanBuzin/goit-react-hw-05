@@ -42,7 +42,7 @@ const MovieCast = () => {
         {casts.length > 0 ? (
           casts.map((cast) => {
             return (
-              <li key={cast_id} className={css.item}>
+              <li key={cast.cast_id} className={css.item}>
                 <img
                   src={
                     cast.profile_path
