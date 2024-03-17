@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MovieList from "../../components/MovieList/MovieList";
+import MovieList from "../../components/MovieList/MavieList";
 import css from "./MoviePage.module.css";
 import { useSearchParams } from "react-router-dom";
 import { getImagePath, searchMovie } from "../../rest-api";
