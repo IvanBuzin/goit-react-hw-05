@@ -12,7 +12,8 @@ const MovieCast = () => {
   const [urlPath, setUrlPath] = useState("");
   const [loader, setLoader] = useState(false);
 
-  const defaultImg = "";
+  const defaultImg =
+    "https://drive.google.com/file/d/1duL1VQXwqE_WgAS_279R3dJhwdF-9JZ3/view?usp=sharing";
 
   useEffect(() => {
     const getCastsData = async () => {
