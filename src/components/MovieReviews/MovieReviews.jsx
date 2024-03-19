@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getReviews } from "../../rest-api";
 import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import Loader from "../Loader/Loader";
+import css from "./MovieReviews.module.css";
 
 const MovieReviews = () => {
   const { movieId } = useParams();
