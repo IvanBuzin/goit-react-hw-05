@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { getImagePath, getMovieById } from "../../rest-api";
 import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import { useState } from "react";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import Error from "../../components/Error/Error";
 import css from "./MovieDetailsPage.module.css";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useRef } from "react";
@@ -98,7 +98,7 @@ const MovieDetailsPage = () => {
       <Suspense fallback={<Loader />}>
         <Outlet />
       </Suspense>
-      {error && <ErrorMessage />}
+      {error && <Error />}
     </div>
   );
 };

@@ -1,15 +1,15 @@
 import { useState } from "react";
 import MovieList from "../../components/MovieList/MavieList";
-import css from "./MoviePage.module.css";
+import css from "./MoviesPage.module.css";
 import { useSearchParams } from "react-router-dom";
 import { getImagePath, searchMovie } from "../../rest-api";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import Error from "../../components/Error/Error";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import { useEffect } from "react";
 import Loader from "../../components/Loader/Loader";
 import LoadMoreBtn from "../../components/LoadMoreBtn/LoadMoreBtn";
 
-const MoviePage = () => {
+const MoviesPage = () => {
   const [movies, setMovies] = useState([]);
   const [params, setParams] = useSearchParams();
   const [error, setError] = useState(false);
@@ -57,10 +57,10 @@ const MoviePage = () => {
     <div className={css.movieBox}>
       <SearchForm request={handleSearch} />
       {loader && <Loader />}
-      {error && <ErrorMessage />}
+      {error && <Error />}
       <MovieList movies={movies} urlPath={urlPath} />
       {showBtn && <LoadMoreBtn onClick={handleLoadMore} />}
     </div>
   );
 };
-export default MoviePage;
+export default MoviesPage;

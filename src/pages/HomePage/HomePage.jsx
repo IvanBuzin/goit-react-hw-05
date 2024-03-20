@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { getImagePath, trendingMovie } from "../../rest-api";
 import { useState } from "react";
-import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import Error from "../../components/Error/Error";
 import MovieList from "../../components/MovieList/MavieList";
 
 const HomePage = () => {
@@ -28,7 +28,7 @@ const HomePage = () => {
     <div>
       <h2>Trending todey</h2>
       <MovieList movies={movies} urlPath={urlPath} />
-      {error && <ErrorMessage />}
+      {error && <Error />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getReviews } from "../../rest-api";
-import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import Error from "../Error/Error";
 import Loader from "../Loader/Loader";
 import css from "./MovieReviews.module.css";
 
@@ -48,7 +48,7 @@ const MovieReviews = () => {
           <p>This movie has no rewiews</p>
         )}
       </ul>
-      {error && <ErrorMessage />}
+      {error && <Error />}
     </div>
   );
 };
