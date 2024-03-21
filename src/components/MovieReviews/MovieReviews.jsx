@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import getReviews from "../../rest-api";
 import Loader from "../Loader/Loader";
+import Error from "../Error/Error";
 import css from "./MovieReviews.module.css";
 
 const MovieReviews = () => {
