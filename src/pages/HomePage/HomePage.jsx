@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { trendingMovies } from "../../rest-api";
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import css from "./HomePage.module.css";
 
