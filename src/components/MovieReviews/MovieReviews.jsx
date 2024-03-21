@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getReviews } from "../../rest-api";
+import getReviews from "../../rest-api";
 import Error from "../Error/Error";
 import Loader from "../Loader/Loader";
 import css from "./MovieReviews.module.css";
