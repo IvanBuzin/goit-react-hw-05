@@ -1,35 +1,36 @@
 import { useEffect } from "react";
-import { getImagePath, trendingMovie } from "../../rest-api";
+import { trendingMovies } from "../../rest-api";
 import { useState } from "react";
-import Error from "../../components/Error/Error";
-import MovieList from "../../components/MovieList/MavieList";
+import { NavLink } from "react-router-dom";
+import css from "./HomePage.module.css";
 
-const HomePage = () => {
-  const [movies, setMovies] = useState([]);
-  const [error, setError] = useState(false);
-  const [urlPath, setUrlPath] = useState("");
+export default function HomePage() {
+  const [movies, setMovies] = useState(null);
 
   useEffect(() => {
-    const onTrend = async () => {
+    const getMovies = async () => {
       try {
-        const trendList = await trendingMovie();
-        const imagePath = await getImagePath();
-        const { base_url, backdrop_sizes } = imagePath;
-        const imageUrl = `${base_url}${backdrop_sizes[1]}`;
-        setMovies(trendList);
-        setUrlPath(imageUrl);
+        const data = await trendingMovies();
+        setMovies(data);
       } catch (error) {
-        setError(true);
+        console.error("Error fetching trending movies: ", error);
       }
     };
-    onTrend();
+    getMovies();
   }, []);
   return (
     <div>
       <h2>Trending todey</h2>
-      <MovieList movies={movies} urlPath={urlPath} />
-      {error && <Error />}
+      <ul>
+        {movies &&
+          movies.map((movie) => {
+            <li key={movie.id}>
+              <NavLink className={css.linkElrment} to={`/movies/${movie.id}`}>
+                {movie.original_title}
+              </NavLink>
+            </li>;
+          })}
+      </ul>
     </div>
   );
-};
-export default HomePage;
+}

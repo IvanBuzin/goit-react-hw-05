@@ -1,66 +1,78 @@
-import { useState } from "react";
-import MovieList from "../../components/MovieList/MavieList";
+import { useRef, useState } from "react";
+import { getMovies } from "../../rest-api";
 import css from "./MoviesPage.module.css";
-import { useSearchParams } from "react-router-dom";
-import { getImagePath, searchMovie } from "../../rest-api";
-import Error from "../../components/Error/Error";
-import SearchForm from "../../components/SearchForm/SearchForm";
-import { useEffect } from "react";
-import Loader from "../../components/Loader/Loader";
-import LoadMoreBtn from "../../components/LoadMoreBtn/LoadMoreBtn";
+import { useNavigate, NavLink } from "react-router-dom";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
-const MoviesPage = () => {
-  const [movies, setMovies] = useState([]);
-  const [params, setParams] = useSearchParams();
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [urlPath, setUrlPath] = useState("");
-  const [page, setPage] = useState(1);
-  const [showBtn, setShowBtn] = useState(false);
+export default function MoviesPage() {
+  const inputElement = useRef();
+  const [moviesList, setMoviesList] = useState(null);
+  const navigate = useNavigate();
 
-  const filmSearch = params.get("query") ?? "";
+  async function getListOfMovies(event) {
+    event.preventDefault();
 
-  const handleSearch = (inputQuery) => {
-    setPage(1);
-    setMovies([]);
-    params.set("query", inputQuery);
-    setParams(params);
-  };
+    if (inputElement.current.value.trim() === "") {
+      toast.error("Plese input your request!", {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+    try {
+      const nameOfMovie = inputElement.current.value;
+      const data = await getMovies(nameOfMovie);
+      setMoviesList(data);
+      navigate(`?query=${nameOfMovie}`);
 
-  useEffect(() => {
-    const pullRequest = async () => {
-      setLoader(true);
-      try {
-        const response = await searchMovie(filmSearch, page);
-        const imagePath = await getImagePath();
-        const { base_url, backdrop_sizes } = imagePath;
-        const imageUrl = `${base_url}${backdrop_sizes[1]}`;
-        setUrlPath(imageUrl);
-        setMovies((prevMovie) => [...prevMovie, ...response.results]);
-        setShowBtn(
-          response.total_pages !== page && response.results.length > 0
-        );
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoader(false);
+      if (data.length === 0) {
+        toast.info("Unfortunately, there are no movies for this request!", {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       }
-    };
-    pullRequest();
-  }, [filmSearch, page]);
-
-  const handleLoadMore = () => {
-    setPage(page + 1);
-  };
+    } catch (error) {
+      console.error("Error while searching for movies by keyword: ", error);
+    } finally {
+      inputElement.current.value = "";
+    }
+  }
 
   return (
-    <div className={css.movieBox}>
-      <SearchForm request={handleSearch} />
-      {loader && <Loader />}
-      {error && <Error />}
-      <MovieList movies={movies} urlPath={urlPath} />
-      {showBtn && <LoadMoreBtn onClick={handleLoadMore} />}
-    </div>
+    <>
+      <form className={css.formElement} onSubmit={getListOfMovies}>
+        <input className={css.inputItem} type="text" ref={inputElement} />
+        <button className={css.buttonElement} type="submit">
+          Search
+        </button>
+      </form>
+
+      <ToastContainer />
+
+      <ul>
+        {moviesList &&
+          moviesList.map((movie) => (
+            <li className={css.listItem} key={movie.id}>
+              <NavLink className={css.linkElement} to={`${movie.id}`}>
+                {movie.title}
+              </NavLink>
+            </li>
+          ))}
+      </ul>
+    </>
   );
-};
-export default MoviesPage;
+}

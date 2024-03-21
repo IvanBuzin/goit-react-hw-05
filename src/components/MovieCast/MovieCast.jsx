@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ErrorMessage } from "formik";
+import { Error } from "../Error/Error";
 import { getCredits, getImagePath } from "../../rest-api";
 import css from "./MovieCast.module.css";
 import Loader from "../Loader/Loader";
@@ -65,7 +65,7 @@ const MovieCast = () => {
           <p>This movie has no casts</p>
         )}
       </ul>
-      {error && <ErrorMessage />}
+      {error && <Error />}
     </div>
   );
 };
