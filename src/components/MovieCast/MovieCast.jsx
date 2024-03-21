@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Error } from "../Error/Error";
+import Error from "../Error/Error";
 import { getCredits, getImagePath } from "../../rest-api";
 import css from "./MovieCast.module.css";
 import Loader from "../Loader/Loader";
