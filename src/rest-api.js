@@ -9,7 +9,7 @@ export const trendingMovies = async () => {
   return response.data.results;
 };
 
-export const getMovie = async (query, page) => {
+export const getMovies = async (query, page) => {
   const response = await axios.get(`/search/movie?query=${query}&page=${page}`);
   return response.data;
 };
