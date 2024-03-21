@@ -24,7 +24,7 @@ export const getImagePath = async () => {
   return response.data.images;
 };
 
-export const fetchMovieCast = async (movieId) => {
+export const getCredits = async (movieId) => {
   const response = await axios.get(`/movie/${movieId}/credits`);
 
   return response.data.cast;
