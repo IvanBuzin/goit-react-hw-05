@@ -6,7 +6,7 @@ import css from "./MovieCast.module.css";
 
 const MovieCast = () => {
   const { movieId } = useParams();
-  const [casts, setCasts] = useState([]);
+  const [cast, setCast] = useState([]);
   const [error, setError] = useState(false);
 
   const defaultImg =
@@ -36,7 +36,11 @@ const MovieCast = () => {
               <div className={css.imageContainer}>
                 {profile_path ? (
                   <img
-                    src={`https://image.tmdb.org/t/p/w500${profile_path}`}
+                    src={
+                      cast.profile_path
+                        ? `https://image.tmdb.org/t/p/w500${profile_path}`
+                        : defaultImg
+                    }
                     alt={name}
                   />
                 ) : (
