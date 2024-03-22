@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
 import { searchMovie } from "../../rest-api";
 import { useSearchParams } from "react-router-dom";
-import MovieList from "../components/MovieList/MovieList";
-import Loader from "../components/Loader/Loader";
-import Error from "../components/Error/Error";
+import MovieList from "../../components/MovieList";
+import Loader from "../../components/Loader/Loader";
+import Error from "../../components/Error/Error";
 
 const MoviesPage = () => {
   const [movies, setMovies] = useState([]);
