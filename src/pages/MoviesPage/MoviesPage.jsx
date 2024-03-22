@@ -1,78 +1,66 @@
-import { useRef, useState } from "react";
-import { getMovies } from "../../rest-api";
-import css from "./MoviesPage.module.css";
-import { useNavigate, NavLink } from "react-router-dom";
-import { Bounce, ToastContainer, toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { Formik, Field, Form } from "formik";
+import { searchMovie } from "../api";
+import { useSearchParams } from "react-router-dom";
+import MovieList from "../components/MovieList/MovieList";
+import Loader from "../components/Loader/Loader";
+import Error from "../components/Error/Error";
 
-export default function MoviesPage() {
-  const inputElement = useRef();
-  const [moviesList, setMoviesList] = useState(null);
-  const navigate = useNavigate();
+const MoviesPage = () => {
+  const [movies, setMovies] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [empty, setEmpty] = useState(false);
+  const [error, setError] = useState(false);
 
-  async function getListOfMovies(event) {
-    event.preventDefault();
+  const handleSubmit = (values, actions) => {
+    const inputVale = values.query;
+    setSearchParams({ query: inputVale });
+    actions.resetForm();
+  };
 
-    if (inputElement.current.value.trim() === "") {
-      toast.error("Plese input your request!", {
-        position: "top-right",
-        autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-      return;
-    }
-    try {
-      const nameOfMovie = inputElement.current.value;
-      const data = await getMovies(nameOfMovie);
-      setMoviesList(data);
-      navigate(`?query=${nameOfMovie}`);
+  useEffect(() => {
+    const searchQuery = searchParams.get("query");
+    if (!searchQuery) return;
 
-      if (data.length === 0) {
-        toast.info("Unfortunately, there are no movies for this request!", {
-          position: "top-right",
-          autoClose: 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
+    async function fetchedData() {
+      try {
+        setEmpty(false);
+        setMovies([]);
+        setIsLoading(true);
+        const data = await searchMovie(searchQuery);
+        setMovies(data.results);
+        if (!data.results.length) setEmpty(true);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error while searching for movies by keyword: ", error);
-    } finally {
-      inputElement.current.value = "";
     }
-  }
+
+    fetchedData();
+  }, [searchParams]);
 
   return (
     <>
-      <form className={css.formElement} onSubmit={getListOfMovies}>
-        <input className={css.inputItem} type="text" ref={inputElement} />
-        <button className={css.buttonElement} type="submit">
-          Search
-        </button>
-      </form>
+      <Formik
+        initialValues={{
+          query: "",
+        }}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          <Field name="query" />
+          <button type="submit">Search</button>
+        </Form>
+      </Formik>
 
-      <ToastContainer />
-
-      <ul>
-        {moviesList &&
-          moviesList.map((movie) => (
-            <li className={css.listItem} key={movie.id}>
-              <NavLink className={css.linkElement} to={`${movie.id}`}>
-                {movie.title}
-              </NavLink>
-            </li>
-          ))}
-      </ul>
+      {isLoading && <Loader />}
+      {error && <Error />}
+      {empty && <div>There are no movies at your request</div>}
+      {!empty && <MovieList data={movies} />}
     </>
   );
-}
+};
+
+export default MoviesPage;

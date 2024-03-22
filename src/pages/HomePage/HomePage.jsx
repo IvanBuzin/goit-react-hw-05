@@ -1,35 +1,33 @@
 import { useEffect, useState } from "react";
-import { trendingMovies } from "../../rest-api";
-import { NavLink } from "react-router-dom";
-import css from "./HomePage.module.css";
+import { fetchData } from "../../api";
+import MovieList from "../../components/MovieList/MovieList";
+import Error from "../../components/Error/Error";
 
-export default function HomePage() {
-  const [movies, setMovies] = useState(null);
+const HomePage = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    const getMovies = async () => {
+    async function fetchedData() {
       try {
-        const data = await trendingMovies();
-        setMovies(data);
+        setError(false);
+        const data = await fetchData();
+        setData(data.results);
       } catch (error) {
-        console.error("Error fetching trending movies: ", error);
+        setError(true);
       }
-    };
-    getMovies();
+    }
+
+    fetchedData();
   }, []);
+
   return (
-    <div>
-      <h2>Trending todey</h2>
-      <ul>
-        {movies &&
-          movies.map((movie) => {
-            <li key={movie.id}>
-              <NavLink className={css.linkElrment} to={`/movies/${movie.id}`}>
-                {movie.original_title}
-              </NavLink>
-            </li>;
-          })}
-      </ul>
-    </div>
+    <main>
+      <h1>Trending today</h1>
+      {error && <Error />}
+      {data && <MovieList data={data} />}
+    </main>
   );
-}
+};
+
+export default HomePage;

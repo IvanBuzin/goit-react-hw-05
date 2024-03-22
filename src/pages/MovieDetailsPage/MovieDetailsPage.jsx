@@ -1,105 +1,92 @@
-import { useEffect } from "react";
-import { getImagePath, getMovieById } from "../../rest-api";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
-import { useState } from "react";
-import Error from "../../components/Error/Error";
-import css from "./MovieDetailsPage.module.css";
-import { IoMdArrowRoundBack } from "react-icons/io";
-import { useRef } from "react";
-import { Suspense } from "react";
-import Loader from "../../components/Loader/Loader";
+import { Suspense, useEffect, useRef, useState } from "react";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useParams,
+} from "react-router-dom";
+import { fetchMovieData } from "../api";
+import Loader from "../components/Loader/Loader";
 
 const MovieDetailsPage = () => {
-  const { movieId } = useParams();
-  const [error, setError] = useState(false);
-  const [movies, setMovies] = useState({});
-  const [urlPath, setUrlPath] = useState("");
   const location = useLocation();
-  const backLinkRef = useRef(location.state ?? "/movies");
-  const [loader, setLoader] = useState(false);
-
-  const defaultImg =
-    "https://drive.google.com/file/d/1duL1VQXwqE_WgAS_279R3dJhwdF-9JZ3/view?usp=sharing";
+  const [movie, setMovie] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const { movieId } = useParams();
+  const backLinkHref = useRef(location.state ?? "/");
 
   useEffect(() => {
-    const movieDetails = async () => {
-      setLoader(true);
+    async function fetchedData() {
       try {
-        const getMovieInfo = await getMovieById(movieId);
-        const imagePath = await getImagePath();
-        const { base_url, backdrop_sizes } = imagePath;
-        const imageUrl = `${base_url}${backdrop_sizes[0]}`;
-
-        setUrlPath(imageUrl);
-        setMovies(getMovieInfo);
+        setIsLoading(true);
+        setError(false);
+        const data = await fetchMovieData(movieId);
+        setMovie(data);
       } catch (error) {
         setError(true);
       } finally {
-        setLoader(false);
+        setIsLoading(false);
       }
-    };
-    movieDetails();
+    }
+
+    fetchedData();
   }, [movieId]);
+
+  const showGenres = () =>
+    movie.genres.reduce((acc, el) => (acc += ` ${el.name}`), "");
+
+  if (!movie) return;
+
   return (
-    <div>
-      <Link className={css.link} to={backLinkRef.current}>
-        <IoMdArrowRoundBack />
-        Go back
-      </Link>
-      {loader && <Loader />}
-      <div className={css.detailsBox}>
-        <img
-          className={css.image}
-          src={
-            movies.poster_path ? `${urlPath}${movies.poster_path}` : defaultImg
-          }
-          alt="movies.title"
-        />
-        <div className={css.info}>
-          <h2>{movies.title}</h2>
-          <p>
-            User Score: <span>{movies.vote_count}</span>
-          </p>
-          <p>
-            Rating: <span>{movies.vote_average}</span>
-          </p>
-          {movies.budget !== 0 && (
-            <p>
-              Film budget:
-              <span>{movies.budget}$</span>
-            </p>
-          )}
-          <h3 className={css.title}>Overview</h3>
-          <p>{movies.overview}</p>
-          <h3 className={css.title}>Genres</h3>
-          <ul className={css.genresList}>
-            {movies.genres &&
-              movies.genres.map((genre) => {
-                return <li key={genre.id}>{genre.name}</li>;
-              })}
-          </ul>
+    <>
+      <button>
+        <Link to={backLinkHref.current}>Go back</Link>
+      </button>
+
+      <div>
+        {isLoading && <div>Loading...</div>}
+        {error && <div>Oops something went wrong! Try reload the page</div>}
+        {movie.poster_path && (
+          <img
+            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            alt={`${movie.title} poster`}
+          />
+        )}
+        <div>
+          <h1>{movie.title}</h1>
+          <p>User Score: {parseInt(movie.vote_average * 10)}%</p>
+          <h2>
+            <b>Overview</b>
+          </h2>
+          <p>{movie.overview ? movie.overview : "There are no overview"}</p>
+          <h3>
+            <b>Genres</b>
+          </h3>
+          <p>{showGenres() ? showGenres() : "Genre not yet specified"}</p>
         </div>
       </div>
-      <div className={css.linkBox}>
-        <p className={css.text}>Additional information</p>
-        <ul className={css.linkList}>
-          <li>
-            <Link className={css.link} to="cast">
-              Casts
-            </Link>
-          </li>
-          <li>
-            <Link className={css.link} to="reviews">
-              Reviews
-            </Link>
-          </li>
-        </ul>
-      </div>
+
+      <hr />
+      <p>Additional information</p>
+
+      <ul>
+        <li>
+          <NavLink to="cast">Cast</NavLink>
+        </li>
+        <li>
+          <NavLink to="reviews">Reviews</NavLink>
+        </li>
+      </ul>
+
+      <hr />
+
       <Suspense fallback={<Loader />}>
         <Outlet />
       </Suspense>
-      {error && <Error />}
-    </div>
+    </>
   );
 };
+
 export default MovieDetailsPage;

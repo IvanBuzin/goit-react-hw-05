@@ -1,53 +1,64 @@
 import { useEffect, useState } from "react";
+import { fetchMovieReviews } from "../../api";
 import { useParams } from "react-router-dom";
-import getReviews from "../../rest-api";
-import Loader from "../Loader/Loader";
 import css from "./MovieReviews.module.css";
 
 const MovieReviews = () => {
-  const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
-  const [error, setError] = useState(false);
-  const [loader, setLoader] = useState(false);
+  const { movieId } = useParams();
 
   useEffect(() => {
-    setLoader(true);
-    if (!movieId) {
-      return;
-    }
-    const getCastsData = async () => {
+    async function fetchedData() {
       try {
-        const response = await getReviews(movieId);
-        setReviews(response);
+        const data = await fetchMovieReviews(movieId);
+        setReviews(data.results);
       } catch (error) {
-        setError(true);
-      } finally {
-        setLoader(false);
+        console.log("error");
       }
-    };
-    getCastsData();
+    }
+
+    fetchedData();
   }, [movieId]);
+
   return (
-    <div>
-      {loader && <Loader />}
-      <ul className={css.infoBox}>
-        {reviews.length > 0 ? (
-          reviews.map((review) => {
-            return (
-              <li key={review.id}>
-                <p className={css.author}>
-                  Author:
-                  <span className={css.authorName}>{review.author}</span>
-                </p>
-                <p>{review.content}</p>{" "}
+    <>
+      {reviews.length > 0 ? (
+        <ul className={css.list}>
+          {reviews?.map(
+            ({
+              id,
+              content,
+              author_details: { username, avatar_path },
+              created_at,
+            }) => (
+              <li key={id}>
+                <div className={css.userInfoContainer}>
+                  <div className={css.userInfo}>
+                    {avatar_path && (
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${avatar_path}`}
+                        alt={`user avatar`}
+                        className={css.avatar}
+                      />
+                    )}
+                    <div>
+                      <span className={css.username}>@{username}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className={css.commentContainer}>
+                  <p className={css.comment}>{content}</p>
+                  <span className={css.date}>{created_at}</span>
+                </div>
               </li>
-            );
-          })
-        ) : (
-          <p>This movie has no rewiews</p>
-        )}
-      </ul>
-    </div>
+            )
+          )}
+        </ul>
+      ) : (
+        <div>There aren&apos;t any reviews yet.</div>
+      )}
+    </>
   );
 };
+
 export default MovieReviews;

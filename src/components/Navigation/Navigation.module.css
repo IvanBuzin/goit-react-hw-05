@@ -1,16 +1,20 @@
-.head {
+.header {
+  display: flex;
   padding: 16px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 5px 0;
+  gap: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid black;
 }
-.nav {
-  display: flex;
-  gap: 12px;
+
+.navLink {
+  font-size: 18px;
+  color: black;
+  text-decoration: none;
 }
-.link {
-  color: #000;
-}
-.active {
-  color: aqua;
+
+.navLink:hover,
+.navLink:focus,
+.navLink.active {
+  color: rgb(20, 163, 220);
+  text-decoration: underline;
 }

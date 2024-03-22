@@ -1,72 +1,65 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { fetchMovieCast } from "../../api";
 import Error from "../Error/Error";
-import { getCredits, getImagePath } from "../../rest-api";
+import { useParams } from "react-router-dom";
 import css from "./MovieCast.module.css";
-import Loader from "../Loader/Loader";
 
 const MovieCast = () => {
   const { movieId } = useParams();
   const [casts, setCasts] = useState([]);
   const [error, setError] = useState(false);
-  const [urlPath, setUrlPath] = useState("");
-  const [loader, setLoader] = useState(false);
 
   const defaultImg =
     "https://drive.google.com/file/d/1duL1VQXwqE_WgAS_279R3dJhwdF-9JZ3/view?usp=sharing";
 
   useEffect(() => {
-    const getCastsData = async () => {
-      setLoader(true);
-      if (!movieId) {
-        return;
-      }
+    async function fetchedData() {
       try {
-        const response = await getCredits(movieId);
-        const imagePath = await getImagePath();
-        const { base_url, logo_sizes } = imagePath;
-        const imageUrl = `${base_url}${logo_sizes[2]}`;
-        setUrlPath(imageUrl);
-        setCasts(response);
+        const data = await fetchMovieCast(movieId);
+        setCast(data.cast);
       } catch (error) {
         setError(true);
-      } finally {
-        setLoader(false);
       }
-    };
-    getCastsData();
+    }
+
+    fetchedData();
   }, [movieId]);
+
   return (
-    <div className={css.castBox}>
-      {loader && <Loader />}
-      <ul className={css.castList}>
-        {casts.length > 0 ? (
-          casts.map((cast) => {
-            return (
-              <li key={cast.cast_id} className={css.item}>
-                <img
-                  src={
-                    cast.profile_path
-                      ? `${urlPath}${cast.profile_path}`
-                      : defaultImg
-                  }
-                  alt={cast.name}
-                  className={css.castImage}
-                />
-                <div className={css.textBox}>
-                  <p>{cast.name}</p>
-                  <p className={css.character}>Character:</p>
-                  <p className={css.characterItem}>{cast.character}</p>
-                </div>
-              </li>
-            );
-          })
-        ) : (
-          <p>This movie has no casts</p>
-        )}
-      </ul>
+    <>
       {error && <Error />}
-    </div>
+      {!cast.length && <div>This information has not been added yet</div>}
+      {cast.length && (
+        <ul className={css.list}>
+          {cast?.map(({ id, name, character, profile_path }) => (
+            <li key={id}>
+              <div className={css.imageContainer}>
+                {profile_path ? (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${profile_path}`}
+                    alt={name}
+                  />
+                ) : (
+                  <div
+                    width={240}
+                    style={{
+                      backgroundColor: "lightgray",
+                      height: 360,
+                      width: 240,
+                    }}
+                  ></div>
+                )}
+              </div>
+              <div className={css.actorDesc}>
+                <span className={css.name}>{name}</span>
+                <span className={css.character}>{character}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
+
 export default MovieCast;
