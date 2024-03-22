@@ -36,22 +36,20 @@ const MovieCast = () => {
               <div className={css.imageContainer}>
                 {profile_path ? (
                   <img
-                    src={
-                      cast.profile_path
-                        ? `https://image.tmdb.org/t/p/w500${profile_path}`
-                        : defaultImg
-                    }
+                    src={`https://image.tmdb.org/t/p/w500${profile_path}`}
                     alt={name}
                   />
                 ) : (
-                  <div
-                    width={240}
-                    style={{
-                      backgroundColor: "lightgray",
-                      height: 360,
-                      width: 240,
-                    }}
-                  ></div>
+                  defaultImg && (
+                    <div
+                      width={240}
+                      style={{
+                        backgroundColor: "lightgray",
+                        height: 360,
+                        width: 240,
+                      }}
+                    ></div>
+                  )
                 )}
               </div>
               <div className={css.actorDesc}>
