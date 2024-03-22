@@ -9,7 +9,7 @@ export const fetchData = async () => {
   return response.data.results;
 };
 
-export const searchMovies = async (query, page) => {
+export const searchMovie = async (query, page) => {
   const response = await axios.get(`/search/movie?query=${query}&page=${page}`);
   return response.data;
 };
