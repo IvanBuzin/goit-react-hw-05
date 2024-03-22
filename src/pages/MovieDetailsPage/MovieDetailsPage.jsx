@@ -7,7 +7,7 @@ import {
   useParams,
 } from "react-router-dom";
 import { fetchMovieData } from "../../rest-api";
-import Loader from "../components/Loader/Loader";
+import Loader from "../../components/Loader/Loader";
 
 const MovieDetailsPage = () => {
   const location = useLocation();
