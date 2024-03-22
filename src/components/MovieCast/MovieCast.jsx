@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchMovieCast } from "../../api";
+import { fetchMovieCast } from "../../rest-api";
 import Error from "../Error/Error";
 import { useParams } from "react-router-dom";
 import css from "./MovieCast.module.css";

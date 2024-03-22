@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
-import { searchMovie } from "../api";
+import { searchMovie } from "../../rest-api";
 import { useSearchParams } from "react-router-dom";
 import MovieList from "../components/MovieList/MovieList";
 import Loader from "../components/Loader/Loader";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchData } from "../../api";
+import { fetchData } from "../../rest-api";
 import MovieList from "../../components/MovieList/MovieList";
 import Error from "../../components/Error/Error";
 
