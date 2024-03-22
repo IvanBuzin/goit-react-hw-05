@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchData } from "../../rest-api";
-import MovieList from "../../components/MovieList/MavieList";
+import { MovieList } from "../../components/MovieList/MavieList";
 import Error from "../../components/Error/Error";
 
 const HomePage = () => {
