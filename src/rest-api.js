@@ -4,7 +4,7 @@ axios.defaults.baseURL = "https://api.themoviedb.org/3";
 axios.defaults.headers.common["Authorization"] =
   "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGY3NDgxZTQ5N2NjNmIwYmM4YjY1YmNmMWVmY2EzZCIsInN1YiI6IjY1ZjcxZDNmZWY5ZDcyMDE3ZWQ1OWI4YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ibmQkZm78mMh7I8Z7lBYklhxH8bLmfkW7xnBjxip6_I";
 
-export const tetchData = async () => {
+export const fetchData = async () => {
   const response = await axios.get("/trending/movie/day");
   return response.data.results;
 };
