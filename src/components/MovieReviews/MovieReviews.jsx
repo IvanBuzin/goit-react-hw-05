@@ -13,7 +13,7 @@ const MovieReviews = () => {
         const data = await fetchMovieReviews(movieId);
         setReviews(data.results);
       } catch (error) {
-        console.log("error");
+        console.log(error);
       }
     }
 
