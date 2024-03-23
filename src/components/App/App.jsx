@@ -20,7 +20,7 @@ function App() {
 
   return (
     <>
-      <button onClick={handleChange}>toggle</button>
+      <button onClick={handleChange}></button>
 
       <Suspense fallback={<Loader />}>
         <Navigation />
