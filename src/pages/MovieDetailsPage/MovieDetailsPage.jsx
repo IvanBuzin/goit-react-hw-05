@@ -37,7 +37,7 @@ const MovieDetailsPage = () => {
   const showGenres = () =>
     movie.genres.reduce((acc, el) => (acc += ` ${el.name}`), "");
 
-  if (!movie) return;
+  if (!movie) return null;
 
   return (
     <>
@@ -64,7 +64,7 @@ const MovieDetailsPage = () => {
           <h3>
             <b>Genres</b>
           </h3>
-          <p>{showGenres() ? showGenres() : "Genre not yet specified"}</p>
+          <p>{showGenres() || "Genre not yet specified"}</p>
         </div>
       </div>
 
