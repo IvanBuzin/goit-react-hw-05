@@ -60,7 +60,7 @@ const MovieDetailsPage = () => {
           <h2>
             <b>Overview</b>
           </h2>
-          <p>{movie.overview ? movie.overview : "There are no overview"}</p>
+          <p>{movie.overview || "There are no overview"}</p>
           <h3>
             <b>Genres</b>
           </h3>

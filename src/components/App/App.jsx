@@ -1,18 +1,16 @@
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
 import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
-import Loader from "./components/Loader/Loader";
+import Loader from "../Loader/Loader";
 
-const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
+const HomePage = lazy(() => import("../../pages/HomePage/HomePage"));
+const MoviesPage = lazy(() => import("../../pages/MoviesPage/MoviesPage"));
 const MovieDetailsPage = lazy(() =>
-  import("./pages/MovieDetailsPage/MovieDetailsPage")
+  import("../../pages/MovieDetailsPage/MovieDetailsPage")
 );
-const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
-const MovieReviews = lazy(() =>
-  import("./components/MovieReviews/MovieReviews")
-);
-const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+const MovieCast = lazy(() => import("../MovieCast/MovieCast"));
+const MovieReviews = lazy(() => import("../MovieReviews/MovieReviews"));
+const Navigation = lazy(() => import("../Navigation/Navigation"));
 
 function App() {
   const [expanded, setExpanded] = useState(false);
