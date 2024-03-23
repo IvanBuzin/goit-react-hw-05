@@ -1,6 +1,6 @@
 import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage";
 import { Route, Routes } from "react-router-dom";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense } from "react";
 import Loader from "../Loader/Loader";
 
 const HomePage = lazy(() => import("../../pages/HomePage/HomePage"));
@@ -13,15 +13,8 @@ const MovieReviews = lazy(() => import("../MovieReviews/MovieReviews"));
 const Navigation = lazy(() => import("../Navigation/Navigation"));
 
 function App() {
-  const [expanded, setExpanded] = useState(false);
-  const handleChange = () => {
-    setExpanded(!expanded);
-  };
-
   return (
     <>
-      <button onClick={handleChange}></button>
-
       <Suspense fallback={<Loader />}>
         <Navigation />
 
